@@ -48,11 +48,11 @@ app.post("/params", (req, res) => {
 });
 
 app.get("/wait", (req, res) => {
-    setTimeout(() => {
+    setTimeout(handler: () => {
         res.send({
             message: "Thanks for waiting"
         });
-        1000);
+        timeout: 1000);
     },
 });
 
