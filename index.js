@@ -1,77 +1,111 @@
 //express is the framework we're going to use to handle requests
-const express = require('express');
+const express = require('express')
 //Create a new instance of express
-const app = express();
+const app = express()
+
+//let middleware = require('./utilities/middleware')
 
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
-//pg-promise is a postgres library that uses javascript promises
-const pgp = require('pg-promise')();
-//We have to set ssl usage to true for Heroku to accept our connection
-pgp.pg.defaults.ssl = true;
+//Obtain a Pool of DB connections.
+const { Pool } = require('pg')
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false,
+    }
+})
 
-//Create connection to Heroku Database
-let db = pgp(process.env.DATABASE_URL);
-
-if(!db) {
-   console.log("Please make sure that postgres is an addon!");
-   process.exit(1);
-}
-
-/*
- * Hello world functions below...
- */
-/** TO DO */
-app.get("/hello", (req, res) => {
-    res.send({
-        message: "Hello, you sent a GET request"
+app.get("/hello", (request, response)=>{
+    response.send({
+        message: "Hello, you send a GET request"
     });
 });
 
-app.post("/hello", (req, res) => {
-    res.send({
-        message: "Hello, you sent a POST request"
+app.post("/hello", (request, response)=>{
+    response.send({
+        message: "Hello, you send a POST request"
     });
 });
 
-app.get("/params", (req, res) => {
-    res.send({
-        message: "Hello " + req.query['name'] + "!"
-    });
-});
-app.post("/params", (req, res) => {
-    res.send({
-        message: "Hello, " + req.body['name'] + "! You sent a POST Request"
-    });
-});
 
-app.get("/wait", (req, res) => {
-    setTimeout(handler: () => {
-        res.send({
-            message: "Thanks for waiting"
+app.get("/params", (request, response)=>{
+    if(request.query.name){
+        response.send({
+            //req.query is a reference to arguments in the POST body
+            message:"Hello, "+request.query.name+"! You sent a GET request"
         });
-        timeout: 1000);
-    },
+    }else{
+        response.status(400);
+        response.send({
+            message: "Missing required information"
+        });
+    }
+});
+
+app.post("/params", (request, response) => {
+    if (request.body.name) {
+        response.send({
+            //req.body is a reference to arguments in the POST body
+            message: "Hello, " + request.body.name + "! You sent a POST Request"
+        })
+    } else {
+        response.status(400)
+        response.send({
+            message: "Missing required information"
+        })
+    }
+})
+
+
+app.get("/wait", (request, response)=>{
+    setTimeout(()=>{
+        response.send({
+            message:"Thanks for waiting"
+        });
+    }, 5000)
 });
 
 
 
+
+
+
+
 /*
- * Return HTML for the / end point. 
+ * This middleware function will respond to inproperly formed JSON in
+ * request parameters.
+ */
+app.use(function(err, req, res, next) {
+
+    if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+        res.status(400).send({ message: "malformed JSON in parameters" });
+    } else next();
+})
+
+/*
+ * Return HTML for the / end point.
  * This is a nice location to document your web service API
- * Create a web page in HTML/CSS and have this end point return it. 
+ * Create a web page in HTML/CSS and have this end point return it.
  * Look up the node module 'fs' ex: require('fs');
  */
-app.get("/", (req, res) => {
-    res.writeHead(200, {'Content-Type': 'text/html'});
+app.get("/", (request, response) => {
+    //this is a Web page so set the content-type to HTML
+    response.writeHead(200, {'Content-Type': 'text/html'});
     for (i = 1; i < 7; i++) {
         //write a response to the client
-        res.write('<h' + i + ' style="color:blue">Hello World!</h' + i + '>'); 
+        response.write('<h' + i + ' style="color:blue">Hello World!</h' + i + '>');
     }
-    res.end(); //end the response
+    response.end(); //end the response
 });
+
+/*
+ * Serve the API documentation genertated by apidoc as HTML.
+ * https://apidocjs.com/
+ */
+// app.use("/doc", express.static('apidoc'))
 
 /* 
 * Heroku will assign a port you can use via the 'PORT' environment variable
@@ -82,7 +116,7 @@ app.get("/", (req, res) => {
 * You can consider 'let port = process.env.PORT || 5000' to be equivalent to:
 * let port; = process.env.PORT;
 * if(port == null) {port = 5000} 
-*/ 
+*/
 app.listen(process.env.PORT || 5000, () => {
     console.log("Server up and running on port: " + (process.env.PORT || 5000));
 });
