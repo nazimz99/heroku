@@ -16,7 +16,7 @@ const pool = new Pool({
     ssl: {
         rejectUnauthorized: false,
     }
-})
+});
 
 app.get("/hello", (req, res)=>{
     res.send({
@@ -50,14 +50,14 @@ app.post("/params", (req, res) => {
         res.send({
             //req.body is a reference to arguments in the POST body
             message: "Hello, " + req.body.name + "! You sent a POST Request"
-        })
+        });
     } else {
         res.status(400)
         res.send({
             message: "Missing required information"
-        })
+        });
     }
-})
+});
 
 
 app.get("/wait", (req, res) => {
@@ -65,7 +65,7 @@ app.get("/wait", (req, res) => {
         res.send({
             message:"Thanks for waiting"
         });
-    }, 5000)
+    }, 5000);
 });
 
 app.post("/addcourse", (req, res) => {
