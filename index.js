@@ -86,7 +86,7 @@ app.post("/addcourse", (req, res) => {
                 // log the error
             console.log(err);
             res.send({
-                success: false
+                success: false,
                 error: err
             });
         });
