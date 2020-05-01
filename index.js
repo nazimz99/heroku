@@ -68,7 +68,7 @@ app.get("/wait", (req, res) => {
     }, 5000)
 });
 
-/*app.post("/addcourse", (req, res) => {
+app.post("/addcourse", (req, res) => {
     //Parameters for the courses
     let id = req.body['id'];
     let shortdesc = req.body['shortdesc'];
@@ -76,7 +76,7 @@ app.get("/wait", (req, res) => {
     let prereqs = req.body['prereqs'];
 
     if (id && shortdesc && longdesc && prereqs) {
-        db.none("INSERT INTO Courses VALUES ($1, $2, $3, $4)", [id, shortdesc, longdesc, prereqs])
+        db.none("INSERT INTO courses VALUES ($1, $2, $3, $4)", [id, shortdesc, longdesc, prereqs])
             .then(() => {
                 //We successfully added the course, let the user know
                 res.send({
@@ -115,7 +115,7 @@ app.get("/courses", (req, res) => {
           error: error
         })
     });
-})*/;
+});
 
 
 
