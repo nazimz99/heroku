@@ -18,7 +18,8 @@ const pool = new Pool({
     }
 });
 
-app.get("/hello", (req, res)=>{
+app.use('/hello', require('./routes/hello.js'));
+/*app.get("/hello", (req, res)=>{
     res.send({
         message: "Hello, you send a GET request"
     });
@@ -28,14 +29,14 @@ app.post("/hello", (req, res)=>{
     res.send({
         message: "Hello, you send a POST request"
     });
-});
+});*/
 
 
 app.get("/params", (req, res)=>{
     if(req.query.name){
         res.send({
             //req.query is a reference to arguments in the POST body
-            message:"Hello, "+req.query.name+"! You sent a GET request"
+            message:"Hello, "+ req.query.name + "! You sent a GET request"
         });
     }else{
         res.status(400);
@@ -68,7 +69,7 @@ app.get("/wait", (req, res) => {
     }, 5000);
 });
 
-/*app.post("/addcourse", (req, res) => {
+app.post("/addcourse", (req, res) => {
     // Parameters for the courses
     let id = req.body['id'];
     let shortdesc = req.body['shortdesc'];
@@ -97,9 +98,9 @@ app.get("/wait", (req, res) => {
             error: "Missing required information"
         });
     }
-});*/
+});
 
-app.post('/addcourse', (req, res) => {
+/*app.post('/addcourse', (req, res) => {
     let sql = 'INSERT INTO courses SET?'
     let post = {
         id: req.body.id,
@@ -112,7 +113,7 @@ app.post('/addcourse', (req, res) => {
         console.log('success');
         console.log(res);
     });
-});
+});*/
 
 app.get("/courses", (req, res) => {
 
