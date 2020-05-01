@@ -76,7 +76,7 @@ app.post("/addcourse", (req, res) => {
     let prereqs = req.body['prereqs'];
 
     if (id && shortdesc && longdesc && prereqs) {
-        db.none('INSERT INTO Courses VALUES($1, $2, $3, $4)', [id, shortdesc, longdesc, prereqs])
+        db.none("INSERT INTO courses($1, $2, $3, $4) VALUES", [id, shortdesc, longdesc, prereqs])
             .then(() => {
                 //We successfully added the course, let the user know
                 res.send({
@@ -101,7 +101,7 @@ app.post("/addcourse", (req, res) => {
 });
 
 app.get("/courses", (req, res) => {
-    db.manyOrNone('SELECT * FROM Courses')
+    db.manyOrNone('SELECT * FROM courses')
     //If successful, run function passed into. then()
         .then((data) => {
             res.send({
