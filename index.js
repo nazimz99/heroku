@@ -113,7 +113,7 @@ app.get("/courses", (req, res) => {
         res.send({
           success: false,
           error: error
-        })
+        });
     });
 });
 
