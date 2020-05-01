@@ -18,54 +18,103 @@ const pool = new Pool({
     }
 })
 
-app.get("/hello", (request, response)=>{
-    response.send({
+app.get("/hello", (req, res)=>{
+    res.send({
         message: "Hello, you send a GET request"
     });
 });
 
-app.post("/hello", (request, response)=>{
-    response.send({
+app.post("/hello", (req, res)=>{
+    res.send({
         message: "Hello, you send a POST request"
     });
 });
 
 
-app.get("/params", (request, response)=>{
-    if(request.query.name){
-        response.send({
+app.get("/params", (req, res)=>{
+    if(req.query.name){
+        res.send({
             //req.query is a reference to arguments in the POST body
-            message:"Hello, "+request.query.name+"! You sent a GET request"
+            message:"Hello, "+req.query.name+"! You sent a GET request"
         });
     }else{
-        response.status(400);
-        response.send({
+        res.status(400);
+        res.send({
             message: "Missing required information"
         });
     }
 });
 
-app.post("/params", (request, response) => {
-    if (request.body.name) {
-        response.send({
+app.post("/params", (req, res) => {
+    if (req.body.name) {
+        res.send({
             //req.body is a reference to arguments in the POST body
-            message: "Hello, " + request.body.name + "! You sent a POST Request"
+            message: "Hello, " + req.body.name + "! You sent a POST Request"
         })
     } else {
-        response.status(400)
-        response.send({
+        res.status(400)
+        res.send({
             message: "Missing required information"
         })
     }
 })
 
 
-app.get("/wait", (request, response)=>{
+app.get("/wait", (req, res)=>{
     setTimeout(()=>{
-        response.send({
+        res.send({
             message:"Thanks for waiting"
         });
     }, 5000)
+});
+
+app.post("/addcourse", (req, res) => {
+    //Parameters for the courses
+    let id = req.body['id'];
+    let shortdesc = req.body['shortdesc'];
+    let longdesc = req.body['longdesc'];
+    let prereqs = req.body['prereqs'];
+
+    if (id && shortdesc && longdesc && prereqs) {
+        db.none("INSERT INTO Courses VALUES ($1, $2, $3, $4)", [id, shortdesc, longdesc, prereqs])
+            .then(() => {
+                //We successfully added the course, let the user know
+                res.send({
+                    success: true
+                });
+            }).catch((err) => {
+                // log the error
+            console.log(err);
+            res.send({
+                success: false
+                error: err
+            });
+        });
+    }
+    else {
+        res.send({
+            success: false,
+            input: req.body,
+            error: "Missing required information"
+        });
+    }
+});
+
+app.get("/courses", (req, res) => {
+    db.manyOrNone('SELECT * FROM Courses')
+    //If successful, run function passed into. then()
+        .then((data) => {
+            res.send({
+                success: true,
+                names: data
+            });
+        }).catch((error) => {
+        console.log(error);
+        res.send({
+          success: false,
+          error: error
+        })
+    });
 });
 
 
@@ -91,14 +140,14 @@ app.use(function(err, req, res, next) {
  * Create a web page in HTML/CSS and have this end point return it.
  * Look up the node module 'fs' ex: require('fs');
  */
-app.get("/", (request, response) => {
+app.get("/", (req, res) => {
     //this is a Web page so set the content-type to HTML
-    response.writeHead(200, {'Content-Type': 'text/html'});
+    res.writeHead(200, {'Content-Type': 'text/html'});
     for (i = 1; i < 7; i++) {
         //write a response to the client
-        response.write('<h' + i + ' style="color:blue">Hello World!</h' + i + '>');
+        res.write('<h' + i + ' style="color:blue">Hello World!</h' + i + '>');
     }
-    response.end(); //end the response
+    res.end(); //end the response
 });
 
 /*
