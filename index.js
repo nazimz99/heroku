@@ -68,7 +68,7 @@ app.get("/wait", (req, res) => {
     }, 5000);
 });
 
-app.post("/addcourse", (req, res) => {
+/*app.post("/addcourse", (req, res) => {
     // Parameters for the courses
     let id = req.body['id'];
     let shortdesc = req.body['shortdesc'];
@@ -97,6 +97,21 @@ app.post("/addcourse", (req, res) => {
             error: "Missing required information"
         });
     }
+});*/
+
+app.post('/addcourse', (req, res) => {
+    let sql = 'INSERT INTO courses SET?'
+    let post = {
+        id: req.body.id,
+        shortdesc = req.body.shortdesc
+        longdesc = req.body.longdesc
+        prereqs = req.body.prereqs
+    }
+    db.query(sql, post, (err, res) => {
+        if (err) throw err;
+        console.log('success');
+        console.log(res);
+    });
 });
 
 app.get("/courses", (req, res) => {
