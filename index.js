@@ -60,7 +60,7 @@ app.post("/params", (req, res) => {
 })
 
 
-app.get("/wait", (req, res)=>{
+app.get("/wait", (req, res) => {
     setTimeout(()=>{
         res.send({
             message:"Thanks for waiting"
@@ -68,7 +68,7 @@ app.get("/wait", (req, res)=>{
     }, 5000)
 });
 
-app.post("/addcourse", (req, res) => {
+/*app.post("/addcourse", (req, res) => {
     //Parameters for the courses
     let id = req.body['id'];
     let shortdesc = req.body['shortdesc'];
@@ -115,10 +115,7 @@ app.get("/courses", (req, res) => {
           error: error
         })
     });
-});
-
-
-
+})*/;
 
 
 
