@@ -19,7 +19,7 @@ const pool = new Pool({
 });
 
 app.use('/hello', require('./routes/hello.js'));
-app.use('/hello', require('./routes/params.js'))
+app.use('/params', require('./routes/params.js'))
 /*app.get("/hello", (req, res)=>{
     res.send({
         message: "Hello, you send a GET request"
