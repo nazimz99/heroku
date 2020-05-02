@@ -3,7 +3,7 @@ const express = require('express')
 //Create a new instance of express
 const app = express()
 
-let middleware = require('./utilities/middleware')
+//let middleware = require('./utilities/middleware')
 
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
