@@ -1,12 +1,12 @@
 const express = require('express');
 
 //pg-promise is a postgres library that uses javascript promises
-const pg = require('pg-promise');
+const pgp = require('pg-promise')();
 //We have to set ssl usage to true for Heroku to accept our connection
-pg.pg.defaults.ssl = true;
+pgp.pg.defaults.ssl = true;
 
 //Create connection to Heroku Database
-let db = pg(process.env.DATABASE_URL);
+let db = pgp(process.env.DATABASE_URL);
 
 if (!db) {
     console.log("Make sure that postgres is an addon!");
