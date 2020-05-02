@@ -1,22 +1,22 @@
 const express = require('express');
 
 //pg-promise is a postgres library that uses javascript promises
-const pgp = require('pg-promise');
+const pgp = require('pg-promise')();
 //We have to set ssl usage to true for Heroku to accept our connection
 pgp.pg.defaults.ssl = true;
 
 //Create connection to Heroku Database
 let db = pgp(process.env.DATABASE_URL);
 
-if (!db) {
-    console.log("Make sure that postgres is an addon!");
-    process.exit();
+if(!db) {
+    console.log("Please make sure that postgres is an addon!");
+    process.exit(1);
 }
 
 let router = express.Router();
 
 const bodyParser = require("body-parser");
-//This allows parsing of the body of POST requests that are encoded in JSON
+//This allows parsing of the body of POST requests, that are encoded in JSON
 router.use(bodyParser.json());
 
 router.post("/addcourse", (req, res) => {
@@ -51,20 +51,22 @@ router.post("/addcourse", (req, res) => {
 });
 
 router.get("/courses", (req, res) => {
+
     db.manyOrNone('SELECT * FROM courses')
-    //If successful, run function passed into .then()
+        //If successful, run function passed into .then()
         .then((data) => {
             res.send({
                 success: true,
                 names: data
             });
         }).catch((error) => {
-            console.log(error);
-            res.send({
-                success: false,
-                error: error
-            });
-        });
+        console.log(error);
+        res.send({
+            success: false,
+            error: error
+        })
+    });
 });
+
 
 module.exports = router;
