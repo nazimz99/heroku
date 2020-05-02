@@ -15,7 +15,7 @@ if (!db) {
 
 let router = express.Router();
 
-const bodyparser = require("body-parser");
+const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests that are encoded in JSON
 router.use(bodyParser.json());
 
