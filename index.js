@@ -21,6 +21,7 @@ const pool = new Pool({
 app.use('/hello', require('./routes/hello.js'));
 app.use('/params', require('./routes/params.js'))
 app.use('/', require('./routes/coursessql.js'));
+app.use('/register', require('./routes/register.js'));
 /*app.get("/hello", (req, res)=>{
     res.send({
         message: "Hello, you send a GET request"
