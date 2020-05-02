@@ -19,6 +19,7 @@ const pool = new Pool({
 });
 
 app.use('/hello', require('./routes/hello.js'));
+app.use('/hello', require('./routes/params.js'))
 /*app.get("/hello", (req, res)=>{
     res.send({
         message: "Hello, you send a GET request"
@@ -32,7 +33,7 @@ app.post("/hello", (req, res)=>{
 });*/
 
 
-app.get("/params", (req, res)=>{
+/*(app.get("/params", (req, res)=>{
     if(req.query.name){
         res.send({
             //req.query is a reference to arguments in the POST body
@@ -58,7 +59,7 @@ app.post("/params", (req, res) => {
             message: "Missing required information"
         });
     }
-});
+});*/
 
 
 app.get("/wait", (req, res) => {
@@ -182,3 +183,5 @@ app.get("/", (req, res) => {
 app.listen(process.env.PORT || 5000, () => {
     console.log("Server up and running on port: " + (process.env.PORT || 5000));
 });
+
+module.exports = express;
