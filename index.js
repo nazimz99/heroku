@@ -3,7 +3,7 @@ const express = require('express')
 //Create a new instance of express
 const app = express()
 
-//let middleware = require('./utilities/middleware')
+let middleware = require('./utilities/middleware')
 
 const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
@@ -22,6 +22,7 @@ app.use('/hello', require('./routes/hello.js'));
 app.use('/params', require('./routes/params.js'))
 app.use('/', require('./routes/coursessql.js'));
 app.use('/register', require('./routes/register.js'));
+app.use('/login', require('./routes/login.js'));
 /*app.get("/hello", (req, res)=>{
     res.send({
         message: "Hello, you send a GET request"
