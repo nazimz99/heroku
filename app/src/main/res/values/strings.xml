@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Courses Web Services App</string>
+    <string name="title_item_detail">Course Detail</string>
+
+    <!-- Course Fragment Hints -->
+    <string name="enter_course_id_hint">Enter Course ID</string>
+    <string name="enter_course_short_desc_hint">Enter Course Title</string>
+    <string name="enter_course_long_desc_hint">Enter Course Description</string>
+    <string name="enter_course_prereqs_hint">Enter Course Prereqs</string>
+
+    <string name="btn_add_course">Add Course</string>
+</resources>
