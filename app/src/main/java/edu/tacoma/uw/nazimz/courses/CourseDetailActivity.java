@@ -106,6 +106,7 @@ public class CourseDetailActivity extends AppCompatActivity
             mCourseJSON.put(Course.SHORT_DESC, course.getCourseShortDesc());
             mCourseJSON.put(Course.LONG_DESC, course.getCourseLongDesc());
             mCourseJSON.put(Course.PRE_REQS, course.getCoursePrereqs());
+            new AddCourseAsyncTask().execute(url.toString());
         } catch (JSONException e) {
             Toast.makeText(this, "Error with JSON creation on adding a course: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
